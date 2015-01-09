@@ -1,0 +1,88 @@
+<html>
+<head>
+	
+	<script src="./script/proj4js/lib/proj4js-combined.js"></script>
+	<script src="./script/openlayers/OpenLayers.js"></script>
+	<script src="./script/proj4js/lib/defs/projconvert.js"></script>
+  
+  <script>
+
+
+	function drawmap(){
+
+
+		// *******************************************
+		// COLLECT INPUT FROM USER
+		// *******************************************
+			var latpos = document.getElementById("txtlatpos").value;
+			var lonpos = document.getElementById("txtlonpos").value;
+		// *******************************************	
+
+
+
+		// *******************************************
+		// 	DECLARE CONVERSION OBJECTS
+		// *******************************************
+			// Google projection is on 4326
+			var googleProj = new OpenLayers.Projection("EPSG:4326");
+
+			// GIS/Earth light projection is on 27700
+			var gisProj = new OpenLayers.Projection("EPSG:27700"); 
+
+			// get location object based on input objects
+			var location = new OpenLayers.LonLat(lonpos, latpos);
+
+			// Do the conversion
+			var projectedLocation = location.transform(googleProj, gisProj);
+		// *******************************************
+
+
+
+		// *******************************************
+		// PREPARE AND DISPLAY VALUES
+		// *******************************************
+			// display values to the user
+			var projlatpos =  Math.floor(projectedLocation.lat);
+			var projlonpos =  Math.floor(projectedLocation.lon);
+			var strspace = '<p>';
+			var strProjLat = 'GIS y:' + projlatpos.toString();
+			var strProjLon = 'GIS x:' + projlonpos.toString();
+
+			// display the  "X" / "Y"
+			document.getElementById("datadisplaydiv").innerHTML = strProjLon.concat(strspace).concat(strProjLat);
+		// *******************************************
+
+
+	}
+
+
+  </script>
+</head>
+
+<body>
+
+<table>
+<tr>
+	<td>LAT:<input id="txtlatpos" value="51.47465361752685"></td>
+	<td>LON:<input id ="txtlonpos" value="-0.3579955268654581"></td>
+</tr>
+<tr>
+	<td colspan="2" align="center"><input type="button" OnClick="drawmap();" value="convert"></td>
+</tr>
+<tr>
+	<td colspan="2" align="center"><div id="datadisplaydiv"></div></td>
+</tr>
+</table>
+
+
+</body>
+
+
+</html>
+
+
+
+
+
+
+
